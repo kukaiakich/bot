@@ -10,6 +10,8 @@ from typing import Optional
 
 import httpx
 import certifi
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from config import MINSK_LAT, MINSK_LON
 
@@ -55,7 +57,7 @@ async def get_weather_forecast(
     }
 
     try:
-        async with httpx.AsyncClient(timeout=15, verify=certifi.where()) as client:
+        async with httpx.AsyncClient(timeout=15, verify=False) as client:
             resp = await client.get(OPEN_METEO_URL, params=params)
             resp.raise_for_status()
             data = resp.json()
