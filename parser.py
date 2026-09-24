@@ -6,6 +6,7 @@
 
 import asyncio
 import logging
+import certifi
 import re
 from datetime import datetime, timedelta
 from typing import Optional
@@ -66,7 +67,11 @@ async def fetch_schedule(target_date: Optional[datetime] = None) -> list[dict]:
     today = datetime.now()
     week_value = "1" if today.weekday() == 6 else "0"
 
-    async with httpx.AsyncClient(timeout=20, follow_redirects=True) as client:
+    async with httpx.AsyncClient(
+    timeout=20,
+    follow_redirects=True,
+    verify=certifi.where(),   # <-- явно указываем путь к CA-бандлу certifi
+) as client:
         try:
             token = await _get_csrf_token(client)
         except Exception as e:

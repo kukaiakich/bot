@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 import httpx
+import certifi
 
 from config import MINSK_LAT, MINSK_LON
 
@@ -54,7 +55,7 @@ async def get_weather_forecast(
     }
 
     try:
-        async with httpx.AsyncClient(timeout=15) as client:
+        async with httpx.AsyncClient(timeout=15, verify=certifi.where()) as client:
             resp = await client.get(OPEN_METEO_URL, params=params)
             resp.raise_for_status()
             data = resp.json()
