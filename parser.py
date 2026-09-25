@@ -12,8 +12,6 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 import httpx
-import urllib3
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 from bs4 import BeautifulSoup
 
 logger = logging.getLogger(__name__)
@@ -72,7 +70,7 @@ async def fetch_schedule(target_date: Optional[datetime] = None) -> list[dict]:
     async with httpx.AsyncClient(
     timeout=20,
     follow_redirects=True,
-    verify=False,   # <-- отключаем проверку SSL
+    verify=False,
     ) as client:
         try:
             token = await _get_csrf_token(client)
